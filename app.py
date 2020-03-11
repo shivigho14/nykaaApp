@@ -150,7 +150,7 @@ class Inventory(db.Model):
 
 
 class InventoryForm(FlaskForm):
-    
+    options=StringField('options')
     Name = StringField('Name', validators=[InputRequired(), Length( max=20)])
     Description = StringField('Description', validators=[InputRequired(), Length( max=150)])
     Price = StringField('Price', validators=[InputRequired(), Length( max=150)])
@@ -197,6 +197,33 @@ def ListAllItems():
     return render_template('ListAllItems.html', InventoryT=InventoryT)
 
 
+#/DeleteItem
+
+class delInventoryForm(FlaskForm):
+    options=StringField('options')
+
+@app.route('/DeleteItem' , endpoint='DeleteItem'  ,methods=['GET', 'POST'])
+@login_required
+def DeleteItem():
+    InventoryT = Inventory.query.all()
+    form=delInventoryForm()
+    print(form)
+    print("$$$$$$$$$$$$"+str(form.options.data))
+    if form.options.data!=None:
+        print("##########")
+        # print("$$$$$$$$$$$$"+form.options.data)
+        print(form)
+        Inventory.query.filter(Inventory.idNo == form.options.data).delete()
+        db.session.commit()
+        return render_template('deleteitemSuccess.html')
+    return render_template('DeleteItem.html', InventoryT=InventoryT,form=form)
 
 
+#/ShopProduct
+
+@app.route('/ShopProduct' , endpoint='ShopProduct'  ,methods=['GET', 'POST'])
+@login_required
+def ShopProduct():
+
+    return render_template('ShopProduct.html', InventoryT=InventoryT,form=form)
 
