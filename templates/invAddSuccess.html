@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>
+    Inventory addition is Successful
+</title>
+
+</head>
+
+<body>
+
+
+
+
+<h1>Inventory addition is Successful</h1>
+
+{% if current_user.is_authenticated %}
+{% include 'header.html' %}
+{% else %}
+
+{% include 'header_login.html' %}
+{% endif %}
+
+
+</body>
+</html>

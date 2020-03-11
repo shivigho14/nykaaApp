@@ -135,6 +135,68 @@ def logout():
 
 
 
+#AddNewItem
+
+class Inventory(db.Model):
+    idNo = db.Column(db.Integer, primary_key=True)
+    Name = db.Column(db.String(20), unique=True)
+    Description = db.Column(db.String(150))
+    Price = db.Column(db.String(150))
+    URL1=db.Column(db.String(1000))
+    URL2=db.Column(db.String(1000))
+    URL3=db.Column(db.String(1000))
+    def get_id(self):
+        return (self.idNo)
+
+
+class InventoryForm(FlaskForm):
+    
+    Name = StringField('Name', validators=[InputRequired(), Length( max=20)])
+    Description = StringField('Description', validators=[InputRequired(), Length( max=150)])
+    Price = StringField('Price', validators=[InputRequired(), Length( max=150)])
+    URL1  = FileField()
+    URL2  = FileField()
+    URL3 = FileField()
+    
+
+@app.route('/AddNewItem' , endpoint='AddNewItem'  ,methods=['GET', 'POST'])
+@login_required
+def AddNewItem():
+    form=InventoryForm()
+    if form.validate_on_submit():
+        print("##########")        
+        print(form.URL1)
+        filename1 = secure_filename(form.URL1.data.filename)
+        form.URL1.data.save('static/' + filename1)
+        url1 =  filename1
+
+        filename2 = secure_filename(form.URL2.data.filename)
+        form.URL2.data.save('static/' + filename2)
+        url2 =  filename2
+
+        filename3 = secure_filename(form.URL3.data.filename)
+        form.URL3.data.save('static/' + filename3)
+        url3 =  filename3
+
+        inv = Inventory(Name=form.Name.data, Description=form.Description.data, Price=form.Price.data,URL1=url1,URL2=url2,URL3=url3)
+        db.session.add(inv)
+        db.session.commit()
+        return render_template('invAddSuccess.html')  
+    
+    return render_template('AddNewItem.html', form=form)
+
+
+
+
+#ListAllItems
+
+@app.route('/ListAllItems' , endpoint='ListAllItems'  ,methods=['GET', 'POST'])
+@login_required
+def ListAllItems():
+    InventoryT = Inventory.query.all()
+    return render_template('ListAllItems.html', InventoryT=InventoryT)
+
+
 
 
 
