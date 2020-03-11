@@ -1,0 +1,53 @@
+<html>
+
+<head>
+    <title>
+        List All Users
+    </title>
+
+</head>
+
+<body>
+
+
+
+
+    <h1>Listing All registered Users in the page:</h1>
+
+
+    <div class="nkyCnt">
+        <table style=" border: 1px solid blue">
+            <th style=" border: 1px ridge blue">&nbsp;User ID&nbsp;</th>&nbsp;&nbsp;
+            <th style=" border: 1px ridge blue">&nbsp;UserName &nbsp;</th>&nbsp;&nbsp;
+            <th style=" border: 1px ridge blue">&nbsp;EmailAddress&nbsp;</th>&nbsp;&nbsp;
+            <th style=" border: 1px ridge blue">&nbsp;Type&nbsp;</th>&nbsp;&nbsp;
+
+            {% for item in UserTable %}
+            <tr style=" border: 1px dotted blue">
+
+                
+                {% if item.idNo %}<td>{{ item.idNo }}</li>{% endif %}&nbsp;
+                {% if item.userName %}<td>{{ item.userName }}</li>{% endif %}&nbsp;
+                    {% if item.emailAddress %}
+                <td>{{ item.emailAddress }}</li>{% endif %}&nbsp;
+                    {% if item.UserType == "2" %}
+                <td>Admin</li>{% endif %}&nbsp;
+                    {% if item.UserType == "1" %}
+                <td>Customer</li>{% endif %}&nbsp;
+                    
+
+
+                    </trstyle=" border: 1px solid black">
+                    {% endfor %}
+        </table>
+
+    </div>
+
+
+    
+
+    {% include 'header.html' %}
+
+</body>
+
+</html>

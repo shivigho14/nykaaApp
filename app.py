@@ -71,7 +71,7 @@ class UserForm(FlaskForm):
 
 
 
-@app.route('/Register' ,methods=['GET', 'POST'], endpoint='Register')
+@app.route('/Register', endpoint='Register' ,methods=['GET', 'POST'])
 def Register():
     #return '<h1>Hello!</h1>'
     form =UserForm()
@@ -89,4 +89,23 @@ def Register():
 
 
 #ListAllUsers
+
+@app.route('/ListAllUsers', endpoint='ListAllUsers' ,methods=['GET', 'POST'])
+#@login_required
+def ListAllUsers():
+
+    UserTable = User.query.all()
+
+    
+    return render_template('ListAllUsers.html', UserTable=UserTable)
+
+
+    #return render_template('ListAllUsers.html')#, form=form)
+
+
+
+
+
+
+
 
