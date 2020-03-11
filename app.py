@@ -41,9 +41,6 @@ def index():
 
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 
 
@@ -62,6 +59,8 @@ class User(UserMixin, db.Model):
     emailAddress = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     UserType=db.Column(db.String(1))
+    def get_id(self):
+        return (self.idNo)
 
 class UserForm(FlaskForm):
     emailAddress = StringField('emailAddress', validators=[InputRequired(), Email(message='Invalid email'), Length(max=150)])
@@ -93,16 +92,46 @@ def Register():
 @app.route('/ListAllUsers', endpoint='ListAllUsers' ,methods=['GET', 'POST'])
 #@login_required
 def ListAllUsers():
-
     UserTable = User.query.all()
-
-    
     return render_template('ListAllUsers.html', UserTable=UserTable)
-
-
     #return render_template('ListAllUsers.html')#, form=form)
 
+class loginForm(FlaskForm):
+    
+    userName = StringField('userName', validators=[InputRequired(), Length( max=20)])
+    password = PasswordField('password', validators=[InputRequired(), Length( max=150)])
+    remember = BooleanField('remember me')
+    
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
+
+#/login
+@app.route('/login', endpoint='login'  ,methods=['GET', 'POST'])
+#@login_required
+def login():
+    form =loginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(userName=form.userName.data).first()
+        if user:
+            if check_password_hash(user.password, form.password.data):
+                login_user(user, remember=form.remember.data)
+                return render_template('loginsuccessful.html')
+        return render_template('loginUnsuccessful.html')
+    
+    
+    return render_template('login.html', form=form)
+
+
+
+#/logout
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return render_template('Welcome.html')#, form=form)
 
 
 
