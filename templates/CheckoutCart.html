@@ -1,0 +1,68 @@
+<html>
+<head>
+<title>
+    Checkout Cart page
+</title>
+
+</head>
+
+<body>
+
+
+
+
+<h1>
+    Checkout Cart page
+</h1>
+
+
+
+
+{{ form.hidden_tag() }}
+
+<form  method="POST" action="/CheckoutCart" >
+<div class="nkyCnt">
+    <table style=" border: 1px solid blue">
+        
+        <th style=" border: 1px ridge blue">&nbsp;Item ID&nbsp;</th>&nbsp;&nbsp;
+        <th style=" border: 1px ridge blue">&nbsp;Quantity &nbsp;</th>&nbsp;&nbsp;
+        <th style=" border: 1px ridge blue">&nbsp;Price&nbsp;</th>&nbsp;&nbsp;
+        <th style=" border: 1px ridge blue">&nbsp;Total Price&nbsp;</th>&nbsp;&nbsp;
+        
+        {% for item in InventoryT %}
+        <tr style=" border: 1px dotted blue">
+
+           
+{% if item.idNo %}<td>{{ item.idNo }}</li>{% endif %}&nbsp;
+                {% if item.quantity %}<td>{{ item.quantity }}</li>{% endif %}&nbsp;
+                    {% if item.Price %}<td>{{ item.Price }}</li>{% endif %}&nbsp;
+                        {% if item.TotalPrice %}<td>{{ item.TotalPrice }}</li>{% endif %}&nbsp;
+                
+
+
+                </tr>
+                {% endfor %}
+    </table>
+
+
+</div>
+<table>
+<tr><td>&nbsp</td><td>&nbsp</td>&nbsp</tr>
+<tr><td></td><td>
+      <!-- <button type="submit">Delete item from inventory</button></td> -->
+      <p><input type=submit   name="options" value="Checkout"></p>
+    </tr>
+</table>
+</form>
+
+
+{% if current_user.is_authenticated %}
+{% include 'header.html' %}
+{% else %}
+
+{% include 'header_login.html' %}
+{% endif %}
+
+
+</body>
+</html>

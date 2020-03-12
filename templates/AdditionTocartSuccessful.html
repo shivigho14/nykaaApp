@@ -1,0 +1,26 @@
+<html>
+<head>
+<title>
+    Addition to cart Successful
+</title>
+
+</head>
+
+<body>
+
+
+
+
+<h1>
+    Addition to cart Successful</h1>
+
+{% if current_user.is_authenticated %}
+{% include 'header.html' %}
+{% else %}
+
+{% include 'header_login.html' %}
+{% endif %}
+
+
+</body>
+</html>

@@ -221,9 +221,81 @@ def DeleteItem():
 
 #/ShopProduct
 
+class shopInventoryForm(FlaskForm):
+    options=StringField('options')
+    quantity=StringField('quantity')
+    Price=StringField('quantity')
+
+class OrderCart(db.Model):
+    idNo = db.Column(db.Integer, primary_key=True)
+    options = db.Column(db.String(150))
+    quantity = db.Column(db.String(150))
+    Price = db.Column(db.String(150))
+    TotalPrice = db.Column(db.String(150))
+    
 @app.route('/ShopProduct' , endpoint='ShopProduct'  ,methods=['GET', 'POST'])
 @login_required
 def ShopProduct():
-
+    form=shopInventoryForm()
+    InventoryT = Inventory.query.all()
+    if form.options.data!=None:
+        print("form.Price.data"+form.Price.data)
+        print("form.quantity.data"+form.quantity.data)
+        Orders = OrderCart(options=form.options.data, quantity=form.quantity.data, Price=form.Price.data,TotalPrice=int(form.Price.data)*int(form.quantity.data))
+        db.session.add(Orders)
+        db.session.commit()
+        return render_template('AdditionTocartSuccessful.html')
     return render_template('ShopProduct.html', InventoryT=InventoryT,form=form)
+
+
+
+#/CheckoutCart
+
+class orderForm(FlaskForm):
+    options=StringField('options')
+    quantity=StringField('quantity')
+    Price=StringField('quantity')
+
+    
+class OrderList(db.Model):
+    idNo = db.Column(db.Integer, primary_key=True)
+    TotalPrice = db.Column(db.String(150))
+    UserName = db.Column(db.String(150))
+    
+
+@app.route('/CheckoutCart' , endpoint='CheckoutCart'  ,methods=['GET', 'POST'])
+@login_required
+def CheckoutCart():
+    form=orderForm()
+    InventoryT = OrderCart.query.all()
+    print(InventoryT)
+    finalP=0
+    for i in InventoryT:
+        print(i.TotalPrice)
+        finalP=finalP+int(i.TotalPrice)
+    print(current_user)
+    #if form!=None:
+    if form.options.data!=None:
+        Orderl = OrderList(TotalPrice=finalP, UserName=str(current_user))
+#        OrderCart.query.delete()
+        db.session.add(Orderl)
+        db.session.query(OrderCart).delete()
+        db.session.commit()
+        return render_template('OrderSuccess.html')    
+
+
+    return render_template('CheckoutCart.html', InventoryT=InventoryT,form=form)
+
+
+#/MyOrders
+
+
+
+@app.route('/MyOrders' , endpoint='MyOrders'  ,methods=['GET', 'POST'])
+@login_required
+def MyOrders():
+    InventoryT = OrderList.query.all()
+    
+    return render_template('MyOrders.html', InventoryT=InventoryT)
+
 

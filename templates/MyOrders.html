@@ -1,0 +1,53 @@
+<html>
+<head>
+<title>
+    All orders
+</title>
+
+</head>
+
+<body>
+
+
+
+
+<h1>All orders</h1>
+
+
+
+<div class="nkyCnt">
+    <table style=" border: 1px solid blue">
+        <th style=" border: 1px ridge blue">&nbsp;ID number&nbsp;</th>&nbsp;&nbsp;
+        <th style=" border: 1px ridge blue">&nbsp;Order Price &nbsp;</th>&nbsp;&nbsp;
+        <th style=" border: 1px ridge blue">&nbsp;Placed by&nbsp;</th>&nbsp;&nbsp;
+        
+        
+        {% for item in InventoryT %}
+        <tr style=" border: 1px dotted blue">
+
+            
+            {% if item.idNo %}<td>{{ item.idNo }}</li>{% endif %}&nbsp;
+            {% if item.TotalPrice %}<td>{{ item.TotalPrice }}</li>{% endif %}&nbsp;
+                {% if item.UserName %}            <td>{{ item.UserName }}</li>{% endif %}&nbsp;
+                    
+                
+
+
+                </trstyle=" border: 1px solid black">
+                {% endfor %}
+    </table>
+
+</div>
+
+
+
+{% if current_user.is_authenticated %}
+{% include 'header.html' %}
+{% else %}
+
+{% include 'header_login.html' %}
+{% endif %}
+
+
+</body>
+</html>
